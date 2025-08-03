@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,17 @@ public class MemberService {
     public Page<Member> getMembersByPage(int page, int size){
         Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
         return memberRepository.findAll(pageable);
+    }
+
+    // 20세 이상 멤버 조회
+    public Page<Member> getAdultMembersSortedByName(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+        return memberRepository.findByAgeGreaterThanEqual(20, pageable);
+    }
+
+    // prefix로 시작하는 name을 가진 멤버 조회
+    public List<Member> getMembersByNamePrefix(String prefix) {
+        return memberRepository.findByNameStartingWith(prefix);
     }
 
 }

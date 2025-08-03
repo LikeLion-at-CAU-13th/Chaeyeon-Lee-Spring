@@ -21,6 +21,7 @@ public class Member {
     private String address;
     private String email;
     private String phoneNumber;
+    private int age; // 18주차 과제1에 사용
 
     @Enumerated(EnumType.STRING)
     private Role role; // 판매자면 SELLER, 구매자면 BUYER
@@ -31,7 +32,7 @@ public class Member {
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private Set<Product> products = new HashSet<>();
-
+    
     public void chargeDeposit(int money){
         this.deposit += money;
     }
@@ -40,12 +41,13 @@ public class Member {
     }
 
     @Builder
-    public Member(String name, String address, String email, String phoneNumber,
+    public Member(String name, String address, String email, String phoneNumber, int age,
                   Role role, Boolean isAdmin, Integer deposit) {
         this.name = name;
         this.address = address;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.age = age;
         this.role = role;
         this.isAdmin = isAdmin;
         this.deposit = deposit;
