@@ -45,4 +45,12 @@ public class Product extends BaseTimeEntity {
         this.stock = stock;
         this.description = description;
     }
+
+    //24주차 과제1 - 재고 차감 메서드
+    public void decreaseStock(int amount){
+        if(this.stock < amount){ //재고가 부족할 경우 예외 발생
+            throw new IllegalArgumentException("상품의 재고가 부족합니다.");
+        }
+        this.stock -= amount; //amount만큼 재고 차감
+    }
 }

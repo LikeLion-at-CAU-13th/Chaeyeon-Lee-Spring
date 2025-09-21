@@ -32,11 +32,18 @@ public class Member {
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private Set<Product> products = new HashSet<>();
-    
+
+    //24주차 과제 - member와 배송정보 매핑
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<ShippingAddress> shippingAddresses = new ArrayList<>();
+
     public void chargeDeposit(int money){
         this.deposit += money;
     }
     public void useDeposit(int money) {
+        if(this.deposit < money){ //24주차 과제1 - 잔액 부족 처리
+            throw new IllegalArgumentException("계좌 잔액이 부족합니다.");
+        }
         this.deposit -= money;
     }
     public boolean isSeller(){return Role.SELLER.equals(this.role);}
