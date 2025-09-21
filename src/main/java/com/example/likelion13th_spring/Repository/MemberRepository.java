@@ -2,6 +2,7 @@ package com.example.likelion13th_spring.Repository;
 
 import com.example.likelion13th_spring.domain.Member;
 
+import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
