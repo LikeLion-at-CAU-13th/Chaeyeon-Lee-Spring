@@ -46,7 +46,7 @@ public class Member {
         }
         this.deposit -= money;
     }
-    public boolean isSeller(){return Role.SELLER.equals(this.role);}
+
     @Builder
     public Member(String name, String address, String email, String phoneNumber, int age,
                   Role role, Boolean isAdmin, Integer deposit) {
