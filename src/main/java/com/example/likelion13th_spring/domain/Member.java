@@ -18,6 +18,7 @@ public class Member {
     private Long id;
 
     private String name;
+    private String password;
     private String address;
     private String email;
     private String phoneNumber;
@@ -48,9 +49,10 @@ public class Member {
     }
 
     @Builder
-    public Member(String name, String address, String email, String phoneNumber, int age,
+    public Member(String name, String password, String address, String email, String phoneNumber, int age,
                   Role role, Boolean isAdmin, Integer deposit) {
         this.name = name;
+        this.password = password;
         this.address = address;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -58,5 +60,12 @@ public class Member {
         this.role = role;
         this.isAdmin = isAdmin;
         this.deposit = deposit;
+    }
+
+    //회원가입 전용 생성사
+    @Builder
+    public Member(String name, String password){
+        this.name = name;
+        this.password = password;
     }
 }
