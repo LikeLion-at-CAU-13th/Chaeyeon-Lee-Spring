@@ -43,7 +43,7 @@ public class MemberService {
     public void join(JoinRequestDto joinRequestDto) {
         // 해당 name이 이미 존재하는 경우
         if (memberRepository.existsByName(joinRequestDto.getName())) {
-            return; // 나중에는 예외 처리
+            throw new IllegalArgumentException("같은 이름의 사용자가 존재합니다."); //25주차 과제 - 예외처리
         }
 
         // 유저 객체 생성
