@@ -30,3 +30,5 @@ spring:
               - email
               - profile
             redirect-uri: "http://localhost:8080/login/oauth2/code/google"
+jwt:
+  secret: 5fHW59Tl3LIHtK41Wbc0m4J1ObCTghHUcaQDw+8E1f8=

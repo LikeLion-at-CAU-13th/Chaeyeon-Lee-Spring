@@ -2,6 +2,7 @@ package com.example.likelion13th_spring.config;
 
 import com.example.likelion13th_spring.Service.CustomOAuth2UserService;
 import com.example.likelion13th_spring.Service.CustomUserDetailsService;
+import com.example.likelion13th_spring.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +11,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -25,6 +28,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService; //UserDetailsService DI. 의종성 주입
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final JwtAuthenticationFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,18 +36,19 @@ public class SecurityConfig {
         http
                 .cors((SecurityConfig::corsAllow)) //CORS 설정
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement((manager)->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션 로그인 안함
+                .httpBasic(AbstractHttpConfigurer::disable) //http basic auth 기반 로그인 인증창이 뜨지 않도록 함
+                .formLogin(AbstractHttpConfigurer::disable) //기본 폼 로그인 페이지 없애기
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/join", "/login", "/oauth2/**", "/login/oauth2/**",
-                                "/h2-console/**", "/error").permitAll() //회원가입, 로그인은 모두 허용 + oauth 경로
-                        .anyRequest().authenticated()) //OAuth 위해 추가
-                        // .requestMatchers("/**").authenticated()) //나머지는 인증된 사용자만 허용
-                .oauth2Login(oauth -> oauth
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(customOAuth2UserService)))
+                        .requestMatchers("/join", "/login").permitAll() // 모두 허용
+                        .requestMatchers("/**").authenticated()) //인증된 사용자만 허용
+                //.oauth2Login(oauth -> oauth
+                  //      .userInfoEndpoint(userInfo -> userInfo
+                    //            .userService(customOAuth2UserService)))
                 // .formLogin(Customizer.withDefaults()) //로그인 설정
                 // .logout(Customizer.withDefaults()) //로그아웃 설정
-                .userDetailsService(customUserDetailsService)
-        ;
+                .userDetailsService(customUserDetailsService);
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); //해당 필터(username...) 전에 jwtFilter가 걸리도록
 
         return http.build();
     }
