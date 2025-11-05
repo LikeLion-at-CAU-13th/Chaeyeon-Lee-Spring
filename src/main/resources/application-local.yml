@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/test-likelion
+    driver-class-name: org.h2.Driver # H2 드라이버 클래스
+    username: sa #기본 사용자 이름
+    password: #기본 비번
+  h2:
+    console:
+      enabled: true #H2 콘솔 활성화
+      path: /h2-console #H2 콘솔 접근 경로
